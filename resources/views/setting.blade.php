@@ -76,21 +76,24 @@
     <div class="pt-3"></div>
 
 
-    <div class="container">
-        <div class="card bg-primary mb-3 bg-img shadow-lg border-0"
-            style="background-image: url('{{ asset('assets/img/core-img/1.png') }}'); border-radius: 6px;">
-                <div class="card-body d-flex align-items-center">
-                    <div class="position-relative me-3">
-                        <img src="{{asset('assets/img/bg-img/user1.png')}}" class="rounded-circle border" width="80" height="80" alt="Profile">
-                    </div>
-                    <div class="user-info">
-                        <h6 class="mb-1 text-white">AQID FAHRI HAFIN</h6>
-                        <p class="small text-white mb-0">352910******01</p>
-                        <span class="badge bg-success text-white rounded-pill px-3">Wali Santri</span>
-                    </div>
+   <div class="container"> 
+    <div class="card bg-primary mb-3 bg-img shadow-lg border-0"
+        style="background-image: url('{{ asset('assets/img/core-img/1.png') }}'); border-radius: 6px;">
+            <div class="card-body d-flex align-items-center">
+                <div class="position-relative me-3">
+                    <!-- Cek session dan fallback ke foto default -->
+                    <img src="{{ asset(session('user_photo') ?? ($user->photo ?? 'assets/img/bg-img/user1.png')) }}" 
+                        class="rounded-circle border" width="80" height="80" alt="Profile">
                 </div>
-        </div>
+                <div class="user-info">
+                    <h6 class="mb-1 text-white">{{ $user->name ?? 'Ahmad Maulana' }}</h6>
+                    <p class="small text-white mb-0">{{ $user->kk ?? '352910******01' }}</p>
+                    <span class="badge bg-success text-white rounded-pill px-3">Wali Santri</span>
+                </div>
+            </div>
     </div>
+</div>
+
 
 
     <div class="container">
@@ -124,7 +127,7 @@
             <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                        <a href="#" class="d-flex align-items-center text-decoration-none w-100">
+                        <a href="pengaturanprofil" class="d-flex align-items-center text-decoration-none w-100">
                             <i class="bi bi-person text-muted fs-2 me-3"></i>
                             <div class="flex-grow-1">
                                 <small  class="text-muted d-block">Pengaturan Profil</small>

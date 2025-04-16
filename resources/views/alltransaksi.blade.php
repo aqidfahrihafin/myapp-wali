@@ -107,7 +107,7 @@
             <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                        <a href="#" class="d-flex align-items-center text-decoration-none w-100">
+                        <a href="{{ url('/transaksi/spp') }}" class="d-flex align-items-center text-decoration-none w-100">
                             <i class="bi bi-cash-stack text-danger fs-5 me-3"></i>
                             <div class="flex-grow-1">
                                 <strong class="text-danger">SPP</strong>
@@ -117,7 +117,7 @@
                         </a>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                        <a href="#" class="d-flex align-items-center text-decoration-none w-100">
+                        <a href="{{ url('/transaksi/topup') }}" class="d-flex align-items-center text-decoration-none w-100">
                             <i class="bi bi-heart-fill text-success fs-5 me-3"></i>
                             <div class="flex-grow-1">
                                 <strong class="text-success">Top Up</strong>
@@ -127,7 +127,7 @@
                         </a>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                        <a href="#" class="d-flex align-items-center text-decoration-none w-100">
+                        <a href="{{ url('/transaksi/tabungan') }}" class="d-flex align-items-center text-decoration-none w-100">
                             <i class="bi bi-lightning-fill text-warning fs-5 me-3"></i>
                             <div class="flex-grow-1">
                                 <strong class="text-warning">Tabungan</strong>
