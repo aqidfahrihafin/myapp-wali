@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\TagihanController;
+
 
 
 
@@ -69,3 +71,6 @@ Route::get('/transaksi/{jenis}', function($jenis) {
 });
 
 Route::get('/cetak-transaksi/{id}', [TransaksiController::class, 'cetak'])->name('cetak.transaksi');
+
+Route::get('/tagihan/{id}', [TagihanController::class, 'show'])->name('tagihan.detail');
+
