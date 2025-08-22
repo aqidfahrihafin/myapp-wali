@@ -1,55 +1,64 @@
 @extends('layouts.app')
-
 @section('backButton')
-<a href="{{ url()->previous() }}">
+  <a href="{{ url('/topup') }}">
     <i class="bi bi-arrow-left-circle text-muted fs-5"></i>
-</a>
+  </a>
 @endsection
 
 @section('content')
-<div class="page-content-wrapper">
-    <div class="pt-3"></div>
+<div class="container mt-5 pt-5"> {{-- Biar turun dari navbar --}}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
 
-    <div class="container">
-        <div class="mb-3 mt-0 d-flex justify-content-between align-items-center">
-            <h6 class="mb-0 text-dark">Detail Tagihan</h6>
-        </div>
+            <!-- Card -->
+            <div class="card shadow-lg border-0 rounded-4">
 
-        <div class="card shadow-sm border-0 rounded-2 p-3">
-            <h6 class="fw-bold text-primary mb-3">
-                <i class="bi {{ $tagihan['icon'] }} me-2"></i> {{ $tagihan['judul'] }}
-            </h6>
+                <!-- Header -->
+                <div class="card-header bg-primary text-white text-center fw-bold rounded-top-4">
+                    Detail Tagihan
+                </div>
 
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item px-0 d-flex justify-content-between">
-                    <span class="text-muted">Nama Santri</span>
-                    <span>{{ $tagihan['nama_santri'] }}</span>
-                </li>
-                <li class="list-group-item px-0 d-flex justify-content-between">
-                    <span class="text-muted">Rayon</span>
-                    <span>{{ $tagihan['rayon'] }}</span>
-                </li>
-                <li class="list-group-item px-0 d-flex justify-content-between">
-                    <span class="text-muted">Kamar</span>
-                    <span>{{ $tagihan['kamar'] }}</span>
-                </li>
-                <li class="list-group-item px-0 d-flex justify-content-between">
-                    <span class="text-muted">Jumlah Tagihan</span>
-                    <span class="fw-bold text-success">Rp {{ number_format($tagihan['jumlah']) }}</span>
-                </li>
-            </ul>
+                <!-- Body -->
+                <div class="card-body p-4">
+                    <h4 class="fw-bold">{{ $tagihan['nama_jenis'] }}</h4>
+                    <p class="text-muted">{{ $tagihan['deskripsi'] }}</p>
 
-            <div class="d-flex mt-4 gap-2">
-                <a href="#" class="btn btn-success w-50">
-                    <i class="bi bi-cash-coin me-2"></i>Bayar
-                </a>
-                <a href="{{ url()->previous() }}" class="btn btn-danger w-50">
-                    <i class="bi bi-x-circle me-2"></i>Cancel
-                </a>
+                    <hr>
+
+                    <div class="mb-3">
+                        <strong>Nominal:</strong>
+                        <span class="text-success fw-bold">
+                            Rp {{ number_format($tagihan['nominal'], 0, ',', '.') }}
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Jatuh Tempo:</strong>
+                        <span class="text-danger fw-semibold">
+                            {{ $tagihan['created_at'] }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-light rounded-bottom-4">
+                    <div class="d-flex justify-content-end gap-2"> {{-- ini bikin tombol ke kanan --}}
+                        <a href="{{ route('tagihan.index') }}" class="btn btn-secondary px-4">
+                            Kembali
+                        </a>
+                        <form action="{{ route('tagihan.prosesBayar', $tagihan['id']) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary px-4">
+                                Bayar Sekarang
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
+            <!-- End Card -->
+
         </div>
     </div>
-
-    <div class="pb-3"></div>
 </div>
 @endsection

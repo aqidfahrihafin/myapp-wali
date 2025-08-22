@@ -3,24 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
-
+use Illuminate\Support\Facades\DB;
 
 class TransaksiController extends Controller
 {
-    public function cetak($id)
+    public function index()
     {
-        // Data dummy dulu
-        $transaksi = [
-            'judul' => 'SPP',
-            'tanggal' => '2025-04-15',
-            'jumlah' => 500000,
-            'tipe' => 'Keluar',
-            'keterangan' => 'Pembayaran SPP bulan April 2025'
-        ];
+        $waliId = session('wali_id');
 
-        // Cetak PDF dari view detail-transaksi-pdf.blade.php
-        $pdf = PDF::loadView('detail-transaksi-pdf', compact('transaksi'));
-        return $pdf->download('transaksi-'.$transaksi['judul'].'.pdf');
+        if (!$waliId) {
+            return redirect()->route('wali.login.form')->with('error', 'Silakan login dulu.');
+        }
+
+        // Ambil riwayat transaksi wali dari tabel transaksi
+        $riwayat = DB::table('transaksi')
+            ->where('wali_id', $waliId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('alltransaksi', compact('riwayat'));
     }
 }

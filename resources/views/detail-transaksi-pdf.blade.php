@@ -19,7 +19,7 @@
         </tr>
         <tr>
             <td class="label">Tanggal</td>
-            <td>{{ $transaksi['tanggal'] }}</td>
+            <td>{{ $transaksi['created_at'] ?? $transaksi['tanggal'] }}</td>
         </tr>
         <tr>
             <td class="label">Jumlah</td>

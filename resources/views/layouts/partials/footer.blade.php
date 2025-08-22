@@ -4,7 +4,42 @@
       <!-- Footer Content -->
       <div class="footer-nav position-relative">
         <ul class="h-100 d-flex align-items-center justify-content-between ps-0">
-          <li class="active">
+          <li class="{{ request()->is('/') ? 'active' : '' }}">
+  <a href="{{ url('/') }}">
+    <i class="bi bi-house"></i>
+    <span>Home</span>
+  </a>
+</li>
+
+<li class="{{ request()->is('profile') ? 'active' : '' }}">
+  <a href="{{ url('/profile') }}">
+    <i class="bi bi-people"></i>
+    <span>Data Santri</span>
+  </a>
+</li>
+
+<li class="{{ request()->is('topup') ? 'active' : '' }}">
+  <a href="{{ url('/topup') }}">
+    <i class="bi bi-wallet2"></i>
+    <span>Top Up</span>
+  </a>
+</li>
+
+<li class="{{ request()->is('alltransaksi') ? 'active' : '' }}">
+  <a href="{{ url('/alltransaksi') }}">
+    <i class="bi bi-collection"></i>
+    <span>Transaksi</span>
+  </a>
+</li>
+
+<li class="{{ request()->is('setting') ? 'active' : '' }}">
+  <a href="{{ url('/setting') }}">
+    <i class="bi bi-gear"></i>
+    <span>Settings</span>
+  </a>
+</li>
+
+          {{-- <li class="active">
             <a href="{{'/'}}">
               <i class="bi bi-house"></i>
               <span>Home</span>
@@ -37,7 +72,7 @@
               <i class="bi bi-gear"></i>
               <span>Settings</span>
             </a>
-          </li>
+          </li> --}}
         </ul>
       </div>
     </div>

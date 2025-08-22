@@ -7,15 +7,14 @@
 @endsection
 
 @section('content')
-
   <!-- Content -->
   <div class="page-content-wrapper">
     <div class="pt-3"></div>
 
-   <div class="container">
-    <div class="mb-3 mt-0 d-flex justify-content-between align-items-center">
+    <div class="container">
+      <div class="mb-3 mt-0 d-flex justify-content-between align-items-center">
         <h6 class="mb-0 text-dark">Data Transaksi</h6>
-    </div>
+      </div>
 
       <div class="card shadow-sm border-0 rounded-2 p-3">
         <h6 class="fw-bold text-primary mb-3">
@@ -24,7 +23,7 @@
         <ul class="list-group list-group-flush">
           <li class="list-group-item px-0 d-flex justify-content-between">
             <span class="text-muted">Tanggal</span>
-            <span>{{ $transaksi['tanggal'] }}</span>
+            <span>{{ $transaksi['created_at'] ?? $transaksi['tanggal'] }}</span>
           </li>
           <li class="list-group-item px-0 d-flex justify-content-between">
             <span class="text-muted">Jumlah</span>
@@ -43,10 +42,9 @@
         <a href="{{ url()->previous() }}" class="btn btn-primary mt-3 w-100">
           <i class="bi bi-arrow-left me-2"></i>Kembali
         </a>
-        <a href="{{ route('cetak.transaksi', ['id' => 1]) }}" class="btn btn-outline-primary mt-2 w-100">
+        <a href="{{ route('cetak.transaksi', ['id' => $transaksi['id']]) }}" class="btn btn-outline-primary mt-2 w-100">
           <i class="bi bi-printer me-2"></i>Cetak Transaksi (PDF)
         </a>
-
       </div>
     </div>
     <div class="pb-3"></div>

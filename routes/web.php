@@ -2,75 +2,76 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PindahAkunController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\TagihanController;
-
-
-
+use App\Http\Controllers\TopupController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KirimUangController;
+use App\Http\Controllers\SantriController;
+use App\Http\Controllers\PengaturanProfilController;
+use App\Http\Controllers\WaliAuthController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\PenarikanController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+// === AUTH ===
+Route::get('/login-wali', [WaliAuthController::class, 'showLoginForm'])->name('wali.login.form');
+Route::post('/login-wali', [WaliAuthController::class, 'login'])->name('wali.login');
+Route::get('/logout-wali', [WaliAuthController::class, 'logout'])->name('wali.logout');
 
-Route::get('/profile', function () {
-    return view('profile');
-});
-Route::get('/alltransaksi', function () {
-    return view('alltransaksi');
-});
-Route::get('/setting', function () {
-    return view('setting');
-});
-Route::get('/pengaturanprofil', [ProfileController::class, 'show'])->name('profile.show');
-Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::post('/edit-profile', [ProfileController::class, 'update'])->name('profile.update');
+// === HOME ===
+Route::get('/', [HomeController::class, 'index'])->name('wali.home');
 
-Route::get('/transaksi/{jenis}', function($jenis) {
-    $data = [];
+// === PROFILE SANTRI ===
+Route::get('/profile', [SantriController::class, 'profile'])->name('profile');
 
-    if ($jenis == 'spp') {
-        $data = [
-            'judul' => 'Pembayaran SPP',
-            'tanggal' => '2025-04-01',
-            'jumlah' => 500000,
-            'tipe' => 'Keluar',
-            'keterangan' => 'Pembayaran SPP bulan April 2025'
-        ];
-    } elseif ($jenis == 'topup') {
-        $data = [
-            'judul' => 'Top Up Saldo',
-            'tanggal' => '2025-04-02',
-            'jumlah' => 700000,
-            'tipe' => 'Masuk',
-            'keterangan' => 'Top up saldo dari wali santri'
-        ];
-    } elseif ($jenis == 'tabungan') {
-        $data = [
-            'judul' => 'Tabungan Santri',
-            'tanggal' => '2025-04-03',
-            'jumlah' => 150000,
-            'tipe' => 'Masuk',
-            'keterangan' => 'Menabung untuk keperluan santri'
-        ];
-    } else {
-        abort(404);
-    }
+// === SETTING & MENU STATIS ===
+Route::get('/setting', [SettingController::class, 'index'])->name('setting');
+Route::get('/pengaturan-akun', fn() => view('pengaturanakun'));
+Route::get('/edit-akun', fn() => view('editakun'));
 
-    return view('detail-transaksi', ['transaksi' => $data]);
-});
+// === PENGATURAN PROFIL WALI ===
+Route::get('/pengaturanprofil', [PengaturanProfilController::class, 'index'])->name('pengaturanprofil');
+Route::get('/edit-profile', [PengaturanProfilController::class, 'edit'])->name('profile.edit');
+Route::post('/edit-profile', [PengaturanProfilController::class, 'update'])->name('profile.update');
 
+// === TRANSAKSI ===
+Route::get('/alltransaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+Route::get('/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show');
 Route::get('/cetak-transaksi/{id}', [TransaksiController::class, 'cetak'])->name('cetak.transaksi');
 
-Route::get('/tagihan/{id}', [TagihanController::class, 'show'])->name('tagihan.detail');
+// === TAGIHAN ===
+Route::get('/tagihan', [TagihanController::class, 'index'])->name('tagihan.index'); // semua tagihan
+Route::get('/tagihan/{id}', [TagihanController::class, 'show'])->name('tagihan.detail'); // detail tagihan
+Route::post('/tagihan/{id}/bayar', [TagihanController::class, 'prosesBayar'])->name('tagihan.prosesBayar'); // proses bayar
 
+// TOPUP
+Route::get('/topup', [TopupController::class, 'form'])->name('topup.form');
+Route::post('/topup/process', [TopupController::class, 'process'])->name('topup.process');
+Route::get('/topup/choose/{orderId}/{amount}', [TopupController::class, 'chooseMethod'])->name('topup.chooseMethod');
+Route::post('/topup/submit', [TopupController::class, 'submitMethod'])->name('topup.submitMethod');
+Route::get('/topup/status/{orderId}', [TopupController::class, 'checkStatus'])->name('topup.status');
+
+// MIDTRANS CALLBACK (harus PUBLIC, POST)
+Route::post('/midtrans/callback', [TopupController::class, 'callback'])->name('midtrans.callback');
+
+// === TARIK ===
+Route::get('/tarik', [PenarikanController::class, 'index'])->name('tarik.index');
+Route::post('/tarik', [PenarikanController::class, 'store'])->name('tarik.store');
+
+// === KIRIM UANG ===
+Route::get('/kirimuang', [KirimUangController::class, 'index'])->name('kirimuang.index');
+Route::post('/kirimuang', [KirimUangController::class, 'store'])->name('kirimuang.store');
+
+// === PINDAH AKUN ===
+Route::get('/pindah-akun', [PindahAkunController::class, 'index'])->name('pindah-akun');
+Route::post('/pindah-akun/switch', [PindahAkunController::class, 'switch'])->name('pindah-akun.switch');
+
+// === SANTRI ===
+Route::get('/santri', [SantriController::class, 'index']);

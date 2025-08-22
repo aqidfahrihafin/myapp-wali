@@ -1,57 +1,92 @@
-<!-- resources/views/profile.blade.php -->
 @extends('layouts.app')
+
 @section('backButton')
-  <a href="{{'/'}}">
+  <a href="{{ url('/') }}">
     <i class="bi bi-arrow-left-circle text-muted fs-5"></i>
   </a>
 @endsection
+
 @section('content')
-<!-- Preloader -->
 <div id="preloader">
   <div class="spinner-grow text-primary" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
 
-<!-- Internet Connection Status -->
-<div class="internet-connection-status" id="internetStatus"></div>
-
 <div class="page-content-wrapper">
-<div class="pt-3"></div>
+  <div class="pt-3"></div>
+  <div class="container">
 
-<div class="container">
-  <!-- User Profile Card -->
-  <div class="card shadow-sm border-0 rounded-2 mb-3">
-    <div class="card-body d-flex align-items-center">
-      <div class="position-relative me-3">
-        <img src="{{ asset('assets/img/bg-img/user1.png') }}" class="rounded-circle border" width="80" height="80" alt="Profile">
+      <!-- User Profile Card -->
+      <div class="card shadow-sm border-0 rounded-2 mb-3">
+          <div class="card-body d-flex align-items-center">
+              <div class="position-relative me-3">
+                  <img src="{{ isset($santri['image']) ? 'http://127.0.0.1:8001/storage/' . $santri['image'] : asset('assets/img/bg-img/user1.png') }}" 
+                       class="rounded-circle border" width="80" height="80" alt="Profile"
+                       style="object-fit: cover;">
+              </div>
+              <div class="user-info">
+                  <!-- Nama santri -->
+                  <h6 class="mb-1 fw-bold">{{ $santri['nama'] ?? 'Tidak ada nama' }}</h6>
+
+                  <!-- Status: santri / pengurus -->
+                  <p class="text-muted small mb-0">
+                      {{ ucfirst($santri['status'] ?? 'Santri') }}
+                  </p>
+
+                  <!-- Badge status aktif/nonaktif -->
+                  <span class="badge bg-{{ ($santri['status_santri'] ?? '') == 'aktif' ? 'success' : 'danger' }} text-white rounded-pill px-3">
+                      {{ ucfirst($santri['status_santri'] ?? 'Tidak Diketahui') }}
+                  </span>
+              </div>
+          </div>
       </div>
-      <div class="user-info">
-        <h6 class="mb-1">Aqid Fahri Hafin</h6>
-        <p class="text-muted small mb-0">Pengurus Pusat</p>
-        <span class="badge bg-success text-dark rounded-pill px-3">Aktif</span>
+
+      <!-- User Information -->
+      <div class="card shadow-sm border-0 rounded-2">
+          <div class="card-body">
+              <table class="table table-borderless mb-0">
+                  <tbody>
+                      <tr>
+                          <td><i class="bi bi-person-fill text-primary me-2"></i> Nama Santri</td>
+                          <td>{{ $santri['nama'] ?? '-' }}</td>
+                      </tr>
+                      <tr>
+                          <td><i class="bi bi-people-fill text-primary me-2"></i> Nama Wali</td>
+                          <td>{{ $santri['nama_wali'] ?? '-' }}</td>
+                      </tr>
+                      <tr>
+                          <td><i class="bi bi-geo-alt-fill text-primary me-2"></i> Alamat</td>
+                          <td>{{ $santri['alamat'] ?? '-' }}</td>
+                      </tr>
+                      <tr>
+                          <td><i class="bi bi-calendar-date text-primary me-2"></i> Tanggal Lahir</td>
+                          <td>
+                              @if(!empty($santri['tanggal_lahir']))
+                                  {{ \Carbon\Carbon::parse($santri['tanggal_lahir'])->translatedFormat('d F Y') }}
+                              @else
+                                  -
+                              @endif
+                          </td>
+                      </tr>
+                      <tr>
+                          <td><i class="bi bi-123 text-primary me-2"></i> NIS</td>
+                          <td>{{ $santri['nis'] ?? '-' }}</td>
+                      </tr>
+                      <tr>
+                          <td><i class="bi bi-credit-card text-primary me-2"></i> NIK</td>
+                          <td>{{ $santri['nik'] ?? '-' }}</td>
+                      </tr>
+                      <tr>
+                          <td><i class="bi bi-card-list text-primary me-2"></i> No KK</td>
+                          <td>{{ $santri['no_kk'] ?? '-' }}</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
       </div>
-    </div>
-  </div>
 
-  <!-- User Information -->
-  <div class="card shadow-sm border-0 rounded-2">
-    <div class="card-body">
-      <table class="table table-borderless">
-        <tbody>
-          <tr><td><i class="bi bi-person-fill me-1 text-primary"></i></td><td>@aqidfahri170100</td></tr>
-          <tr><td><i class="bi bi-person-badge-fill me-1 text-primary"></i></td><td>Aqid Fahri Hafin</td></tr>
-          <tr><td><i class="bi bi-briefcase-fill me-1 text-primary"></i></td><td>Web Developer</td></tr>
-          <tr><td><i class="bi bi-geo-alt-fill me-1 text-primary"></i></td><td>Gadu timur ganding sumenep madura</td></tr>
-          <tr><td><i class="bi bi-envelope-fill me-1 text-primary"></i></td><td>aqidfahrihafin@gmail.com</td></tr>
-          <tr><td><i class="bi bi-globe me-1 text-primary"></i></td><td><a href="#" class="text-decoration-none">apinsdigital.my.id</a></td></tr>
-          <tr><td><i class="bi bi-info-circle-fill me-1 text-primary"></i></td><td>Menekuni bidang web developer sejak tahun 2019.</td></tr>
-        </tbody>
-      </table>
-    </div>
   </div>
-</div>
-
-<div class="pb-3"></div>
+  <div class="pb-5"></div>
 </div>
 @endsection

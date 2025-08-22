@@ -1,0 +1,20 @@
+.footer-nav ul li a {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  transition: all 0.3s ease-in-out;
+}
+
+.footer-nav ul li i {
+  font-size: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.footer-nav ul li.active a {
+  color: #007bff;
+}
+
+.footer-nav ul li.active i {
+  transform: scale(1.4); /* ikon membesar */
+  color: #007bff;
+}
