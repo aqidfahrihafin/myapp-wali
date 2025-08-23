@@ -21,12 +21,14 @@ use App\Http\Controllers\PenarikanController;
 */
 
 // === AUTH ===
-Route::get('/login-wali', [WaliAuthController::class, 'showLoginForm'])->name('wali.login.form');
+Route::get('/login-wali', [WaliAuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login-wali', [WaliAuthController::class, 'login'])->name('wali.login');
 Route::get('/logout-wali', [WaliAuthController::class, 'logout'])->name('wali.logout');
 
-// === HOME ===
+Route::middleware('wali.session')->group(function () {
+    // === HOME ===
 Route::get('/', [HomeController::class, 'index'])->name('wali.home');
+
 
 // === PROFILE SANTRI ===
 Route::get('/profile', [SantriController::class, 'profile'])->name('profile');
@@ -42,9 +44,12 @@ Route::get('/edit-profile', [PengaturanProfilController::class, 'edit'])->name('
 Route::post('/edit-profile', [PengaturanProfilController::class, 'update'])->name('profile.update');
 
 // === TRANSAKSI ===
-Route::get('/alltransaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
-Route::get('/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show');
-Route::get('/cetak-transaksi/{id}', [TransaksiController::class, 'cetak'])->name('cetak.transaksi');
+// Route::get('/alltransaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+// Route::get('/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show');
+// Route::get('/cetak-transaksi/{id}', [TransaksiController::class, 'cetak'])->name('cetak.transaksi');
+Route::get('/alltransaksi', function () {
+    return view('alltransaksi');
+});
 
 // === TAGIHAN ===
 Route::get('/tagihan', [TagihanController::class, 'index'])->name('tagihan.index'); // semua tagihan
@@ -56,10 +61,9 @@ Route::get('/topup', [TopupController::class, 'form'])->name('topup.form');
 Route::post('/topup/process', [TopupController::class, 'process'])->name('topup.process');
 Route::get('/topup/choose/{orderId}/{amount}', [TopupController::class, 'chooseMethod'])->name('topup.chooseMethod');
 Route::post('/topup/submit', [TopupController::class, 'submitMethod'])->name('topup.submitMethod');
+Route::get('/topup/submit/{id}/{method}', [TopupController::class, 'detailtopup'])->name('topup.detail');
 Route::get('/topup/status/{orderId}', [TopupController::class, 'checkStatus'])->name('topup.status');
 
-// MIDTRANS CALLBACK (harus PUBLIC, POST)
-Route::post('/midtrans/callback', [TopupController::class, 'callback'])->name('midtrans.callback');
 
 // === TARIK ===
 Route::get('/tarik', [PenarikanController::class, 'index'])->name('tarik.index');
@@ -75,3 +79,8 @@ Route::post('/pindah-akun/switch', [PindahAkunController::class, 'switch'])->nam
 
 // === SANTRI ===
 Route::get('/santri', [SantriController::class, 'index']);
+
+});
+
+// MIDTRANS CALLBACK (harus PUBLIC, POST)
+Route::post('/midtrans/callback', [TopupController::class, 'callback'])->name('midtrans.callback');

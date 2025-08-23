@@ -11,15 +11,15 @@ class TransaksiController extends Controller
     {
         $waliId = session('wali_id');
 
-        if (!$waliId) {
-            return redirect()->route('wali.login.form')->with('error', 'Silakan login dulu.');
-        }
+        // if (!$waliId) {
+        //     return redirect()->route('wali.login.form')->with('error', 'Silakan login dulu.');
+        // }
 
-        // Ambil riwayat transaksi wali dari tabel transaksi
-        $riwayat = DB::table('transaksi')
-            ->where('wali_id', $waliId)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // // Ambil riwayat transaksi wali dari tabel transaksi
+        // $riwayat = DB::table('transaksi')
+        //     ->where('wali_id', $waliId)
+        //     ->orderBy('created_at', 'desc')
+        //     ->get();
 
         return view('alltransaksi', compact('riwayat'));
     }

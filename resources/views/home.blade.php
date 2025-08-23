@@ -65,7 +65,7 @@
           </a>
         </div>
         <div class="col-4">
-         <a href="#" class="btn w-100 p-2 shadow-sm border-0 d-flex flex-column align-items-center justify-content-center"
+         <a href="/kirimuang" class="btn w-100 p-2 shadow-sm border-0 d-flex flex-column align-items-center justify-content-center"
               style="border-radius: 5px; background: linear-gradient(135deg, #28a745, #85e085); color: white; transition: transform 0.2s, box-shadow 0.2s;">
               <i class="bi bi-send-fill fs-4"></i>
               <span class="fw-bold mt-1" style="font-size: 12px;">Kirim</span>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Saldo;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
@@ -42,13 +44,15 @@ class TopupController extends Controller
     // Step 3: Submit metode & kirim ke Midtrans
     public function submitMethod(Request $request)
     {
-        $orderId = $request->input('order_id');
+       
+        $orderId = $request->input('order_id') . '-' . uniqid();
+
         $amount  = (int) $request->input('amount');
         $raw     = strtolower((string) $request->input('method')); // "bank_bni" | "bni" | "ewallet_gopay" | "gopay" | "qris"
 
         // Ambil santri aktif dari session
         $childId = session('current_child');
-        if (!$childId) {
+        if (!$childId) { 
             return redirect()->route('topup.form')->withErrors(['msg' => 'Santri aktif tidak ditemukan.']);
         }
 
@@ -160,14 +164,14 @@ class TopupController extends Controller
             return redirect()->route('topup.chooseMethod', [$orderId, $amount])
                 ->withErrors(['msg' => 'Koneksi ke Midtrans gagal: ' . $e->getMessage() ]);
         }
-
-        // Tampilkan instruksi pembayaran
-        return view('topup.payment-info', [
-            'response' => $response,
-            'method'   => $method,   // bni|bca|bri|permata|mandiri|qris|gopay
-            'orderId'  => $orderId,
-            'amount'   => $amount,
-        ]);
+        return redirect()->route('topup.detail',['id' => $orderId, 'method' => $method]);
+        // // Tampilkan instruksi pembayaran
+        // return view('topup.payment-info', [
+        //     'response' => $response,
+        //     'method'   => $method,   // bni|bca|bri|permata|mandiri|qris|gopay
+        //     'orderId'  => $orderId,
+        //     'amount'   => $amount,
+        // ]);
     }
 
     // Dipanggil oleh JS di payment-info.blade untuk auto-redirect jika sudah settlement
@@ -215,12 +219,33 @@ class TopupController extends Controller
         // --- Jika settlement → tambahkan saldo anak ---
         if ($status === 'settlement') {
             try {
-                DB::table('anak')->where('id', $order->child_id)->increment('saldo', (int) $order->amount);
+                DB::table('transaksi')->insert([
+            'wali_id'    => null,
+            'santri_id'  => $order->child_id ?? null, // isi kalau ada id santri
+            'jenis'      => 'topup',             // contoh: spp / topup / tabungan
+            'tipe'       => 'Masuk',           // atau 'Keluar'
+            'jumlah'     => $order->amount,            // nominal transaksi
+            'judul'      => 'Top Up Saldo',    // judul transaksi
+            'keterangan' => 'Top up saldo dari wali santri', // deskripsi
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+              DB::table('anak')->where('id', $order->child_id)->increment('saldo', (int) $order->amount);
             } catch (\Throwable $e) {
                 Log::error('Gagal update saldo anak', ['order_id' => $orderId, 'err' => $e->getMessage()]);
             }
         }
 
         return response()->json(['message' => 'OK']);
+    }
+    public function detailtopup($id,$method){
+         $topup = DB::table('topup_orders')->where('order_id', $id)->first();
+         return view('topup.payment-info', [
+            'response' => $topup ->raw_response,
+            'method'   => $method,   // bni|bca|bri|permata|mandiri|qris|gopay
+            'orderId'  => $id,
+            'amount'   => $topup ->amount,
+        ]);
     }
 }

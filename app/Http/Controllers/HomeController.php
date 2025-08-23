@@ -42,8 +42,8 @@ class HomeController extends Controller
         ];
 
         // Hitung saldo (masuk - keluar)
-        $totalMasuk  = DB::table('transaksi')->where('wali_id', $waliId)->where('tipe', 'Masuk')->sum('jumlah');
-        $totalKeluar = DB::table('transaksi')->where('wali_id', $waliId)->where('tipe', 'Keluar')->sum('jumlah');
+        $totalMasuk  = DB::table('transaksi')->where('santri_id', $child['id'])->where('tipe', 'Masuk')->sum('jumlah');
+        $totalKeluar = DB::table('transaksi')->where('santri_id', $child['id'])->where('tipe', 'Keluar')->sum('jumlah');
         $totalSaldo  = $totalMasuk - $totalKeluar;
 
         return view('home', compact('wali', 'child', 'totalSaldo'));

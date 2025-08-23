@@ -13,7 +13,6 @@
     @endif
 
     <h4 class="mb-3">Saldo Anda: Rp {{ number_format($saldo, 0, ',', '.') }}</h4>
-
    <div class="card shadow-sm rounded-4 mt-3">
   <div class="card-body">
     <form action="{{ route('kirimuang.store') }}" method="POST">

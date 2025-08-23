@@ -75,6 +75,6 @@ class WaliAuthController extends Controller
     public function logout()
     {
         session()->flush();
-        return redirect()->route('wali.login.form');
+        return redirect()->route('login');
     }
 }

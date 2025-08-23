@@ -25,14 +25,14 @@
       <div class="header-content header-style-five position-relative d-flex align-items-center justify-content-between">
         <!-- Logo Wrapper -->
         <div class="logo-wrapper">
-            <a href="{{ url('/') }}">
+            <a href="{{'/'}}">
               <i class="bi bi-arrow-left-circle text-muted fs-5"></i>
             </a>
           </div>
 
         <!-- Navbar Toggler -->
         <div class="user-profile logo-wrapper">
-            <a href="{{ url('/') }}">
+            <a href="home.html">
                 <img class="img-circle" src="{{ asset('assets/img/bg-img/user1.png') }}" alt="" style="height: 50px; border-radius: 50%; object-fit: cover;">
             </a>
         </div>
@@ -41,6 +41,7 @@
   </div>
 
   <!-- # Sidenav Left -->
+
   <div class="page-content-wrapper">
 
     <div class="pt-3"></div>
@@ -48,87 +49,75 @@
     <div class="container">
         <div class="mb-3 mt-0 d-flex justify-content-between align-items-center">
             <h6 class="mb-0 text-dark">Data Transaksi</h6>
-            <a href="{{ url('/') }}" class="text-primary fw-bold text-decoration-none"><small> Home</small></a>
+            <a href="#" class="text-primary fw-bold text-decoration-none"><small> Home</small></a>
         </div>
 
-        <!-- Filter -->
         <div class="card shadow-sm border-0 rounded-2 p-3">
             <div class="d-flex justify-content-between align-items-center">
                 <h6 class="mb-0 text-dark d-flex align-items-center">
-                    <i class="bi bi-funnel-fill text-primary me-2"></i>Filter
+                    <i class="bi bi-funnel-fill text-primary me-2"></i>filter
                 </h6>
                 <div class="d-flex gap-2">
                     <!-- Dropdown Jenis Transaksi -->
                     <select class="form-select form-select-sm shadow-sm border-light" style="max-width: 180px;">
                         <option selected>Semua Jenis</option>
-                        <option value="spp">SPP</option>
-                        <option value="tabungan">Tabungan</option>
-                        <option value="lainnya">Lainnya</option>
+                        <option value="1">SPP</option>
+                        <option value="2">Tabungan</option>
+                        <option value="3">Lainnya</option>
                     </select>
 
                     <!-- Dropdown Periode -->
                     <select class="form-select form-select-sm shadow-sm border-light" style="max-width: 180px;">
                         <option selected>Semua Waktu</option>
-                        <option value="bulan">Bulan Ini</option>
-                        <option value="tahun">Tahun Ini</option>
+                        <option value="1">Bulan Ini</option>
+                        <option value="2">Tahun Ini</option>
+                        <option value="3">Custom</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <!-- List Transaksi -->
+
         <div class="card shadow-sm border-0 rounded-2 overflow-hidden mt-3">
             <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                 <ul class="list-group list-group-flush">
-                  @forelse($riwayat as $r)
-                    @php
-                      $jenis = strtolower($r->jenis ?? 'lainnya');   // spp | topup | tabungan
-                      $tipe  = strtolower($r->tipe ?? 'keluar');     // masuk | keluar
-                      $badgeClass = $tipe === 'masuk' ? 'bg-success' : 'bg-danger';
-                      $iconClass  = $tipe === 'masuk' ? 'bi-heart-fill text-success'
-                                    : ($jenis === 'spp' ? 'bi-cash-stack text-danger' : 'bi-lightning-fill text-warning');
-                    @endphp
-
                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                        <a href="{{ route('transaksi.show', $r->id) }}" class="d-flex align-items-center text-decoration-none w-100">
-                            <i class="bi {{ $iconClass }} fs-5 me-3"></i>
+                        <a href="#" class="d-flex align-items-center text-decoration-none w-100">
+                            <i class="bi bi-cash-stack text-danger fs-5 me-3"></i>
                             <div class="flex-grow-1">
-                                <strong class="{{ $tipe === 'masuk' ? 'text-success' : ($jenis === 'spp' ? 'text-danger' : 'text-warning') }}">
-                                    {{ strtoupper($r->judul ?? $r->jenis ?? 'TRANSAKSI') }}
-                                </strong>
-                                <small class="text-muted d-block">{{ ucfirst($tipe) }}</small>
+                                <strong class="text-danger">SPP</strong>
+                                <small class="text-muted d-block">Saldo Keluar</small>
                             </div>
-                            <span class="badge {{ $badgeClass }} text-white p-2 rounded-pill">
-                                Rp. {{ number_format((int)($r->jumlah ?? 0), 0, ',', '.') }}
-                            </span>
+                            <span class="badge bg-danger text-white p-2 rounded-pill">Rp. 500.000</span>
                         </a>
                     </li>
-                  @empty
-                    <li class="list-group-item text-center text-muted">Tidak ada data transaksi</li>
-                  @endforelse
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <a href="#" class="d-flex align-items-center text-decoration-none w-100">
+                            <i class="bi bi-heart-fill text-success fs-5 me-3"></i>
+                            <div class="flex-grow-1">
+                                <strong class="text-success">Top Up</strong>
+                                <small class="text-muted d-block">Saldo Masuk</small>
+                            </div>
+                            <span class="badge bg-success text-white p-2 rounded-pill">Rp. 700.000</span>
+                        </a>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <a href="#" class="d-flex align-items-center text-decoration-none w-100">
+                            <i class="bi bi-lightning-fill text-warning fs-5 me-3"></i>
+                            <div class="flex-grow-1">
+                                <strong class="text-warning">Tabungan</strong>
+                                <small class="text-muted d-block">Tabungan Santri</small>
+                            </div>
+                            <span class="badge bg-warning text-dark p-2 rounded-pill">Rp. 150.000</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
+
     </div>
 
     <div class="pb-3"></div>
   </div>
-
-  <!-- All JavaScript Files -->
-  <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ asset('assets/js/slideToggle.min.js') }}"></script>
-  <script src="{{ asset('assets/js/internet-status.js') }}"></script>
-  <script src="{{ asset('assets/js/tiny-slider.js') }}"></script>
-  <script src="{{ asset('assets/js/venobox.min.js') }}"></script>
-  <script src="{{ asset('assets/js/countdown.js') }}"></script>
-  <script src="{{ asset('assets/js/rangeslider.min.js') }}"></script>
-  <script src="{{ asset('assets/js/vanilla-dataTables.min.js') }}"></script>
-  <script src="{{ asset('assets/js/index.js') }}"></script>
-  <script src="{{ asset('assets/js/imagesloaded.pkgd.min.js') }}"></script>
-  <script src="{{ asset('assets/js/isotope.pkgd.min.js') }}"></script>
-  <script src="{{ asset('assets/js/dark-rtl.js') }}"></script>
-  <script src="{{ asset('assets/js/active.js') }}"></script>
-  <script src="{{ asset('assets/js/pwa.js') }}"></script>
-</body>
 
 @endsection

@@ -30,7 +30,32 @@
                       Bill Key: {{ $response->bill_key ?? 'N/A' }} <br>
                       Biller Code: {{ $response->biller_code ?? 'N/A' }}
                   </p>
+                  @elseif($m === 'bca')
+                  <p class="fw-bold text-primary fs-5 mb-1">
+                    @php
+                        $data = json_decode($response, true);
+                    @endphp
 
+                    {{ $data['va_numbers'][0]['va_number'] ?? 'Tidak ada VA' }}
+
+                  </p>
+                  @elseif($m === 'bni')
+                  <p class="fw-bold text-primary fs-5 mb-1">
+                       @php
+                        $data = json_decode($response, true);
+                    @endphp
+
+                    {{ $data['va_numbers'][0]['va_number'] ?? 'Tidak ada VA' }}
+                  </p>
+                   @elseif($m === 'bri')
+                  <p class="fw-bold text-primary fs-5 mb-1">
+                       @php
+                        $data = json_decode($response, true);
+                    @endphp
+
+                    {{ $data['va_numbers'][0]['va_number'] ?? 'Tidak ada VA' }}
+                    {{ $response }}
+                  </p>
               @else
                   <p class="fw-bold text-primary fs-5 mb-1">
                       {{ $response->va_numbers[0]->va_number ?? 'VA tidak tersedia' }}

@@ -6,10 +6,16 @@
 @endsection
 
 @section('content')
+      <br>
+            <br>
+            <br>
+            <br>
+            <br>
 <div class="container mt-5 pt-5"> {{-- Biar turun dari navbar --}}
     <div class="row justify-content-center">
         <div class="col-md-8">
 
+      
             <!-- Card -->
             <div class="card shadow-lg border-0 rounded-4">
 
