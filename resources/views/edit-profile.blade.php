@@ -36,7 +36,7 @@
               src="{{ $user['photo'] }}" 
               alt="Foto Profil"
               style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; display: block; margin: 0 auto 10px; border: 2px solid #ddd;">
-            <input type="file" class="form-control" id="photo" name="photo" accept="image/*" onchange="previewImage(event)">
+            
           </div>
 
           <!-- Field Input -->

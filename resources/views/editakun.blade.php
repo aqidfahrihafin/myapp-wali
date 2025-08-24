@@ -51,6 +51,7 @@
             <a href="{{ url('/pengaturan-akun') }}" class="btn btn-secondary">Batal</a>
             <button type="submit" class="btn btn-primary">Simpan</button>
         </div>
+        <div style="height: 100px;"></div>
     </form>
 </div>
 

@@ -12,7 +12,6 @@
   @include('layouts.partials.header')
 
   <div class="container mt-4">
-    <div style="height:20px; width:100px;"></div>
     @yield('content')
   </div>
 

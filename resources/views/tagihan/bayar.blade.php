@@ -6,8 +6,10 @@
 @endsection
 
 @section('content')
-<div class="container mt-4">
-    <h4 class="fw-bold mb-3">Bayar Tagihan</h4>
+<div class="page-content-wrapper">
+      <div class="pt-3"></div>
+<div class="container mt-1"></div>
+    
 
     @if (session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
@@ -15,7 +17,13 @@
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-
+    <div class="card shadow-sm p-3">
+        <h3 class="fw-bold mb-0 d-flex justify-content-center align-items-center">Bayar Tagihan</h3>
+        {{-- <div class="card-header bg-primary text-white fw-bold rounded-5 d-flex justify-content-center align-items-center" style="height:50px;">
+            <h3 class="fw-bold mb-0 text-white">Bayar Tagihan</h3>
+        </div> --}}
+    </div>
+        <div class="pt-3"></div>
     <div class="card shadow-sm p-3">
         <h5>{{ $tagihan['nama_jenis'] }}</h5>
         <p>{{ $tagihan['deskripsi'] }}</p>
@@ -30,5 +38,6 @@
             <a href="{{ route('tagihan.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
+</div>
 </div>
 @endsection

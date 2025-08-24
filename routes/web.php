@@ -44,12 +44,10 @@ Route::get('/edit-profile', [PengaturanProfilController::class, 'edit'])->name('
 Route::post('/edit-profile', [PengaturanProfilController::class, 'update'])->name('profile.update');
 
 // === TRANSAKSI ===
-// Route::get('/alltransaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+Route::get('/alltransaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
 // Route::get('/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show');
 // Route::get('/cetak-transaksi/{id}', [TransaksiController::class, 'cetak'])->name('cetak.transaksi');
-Route::get('/alltransaksi', function () {
-    return view('alltransaksi');
-});
+
 
 // === TAGIHAN ===
 Route::get('/tagihan', [TagihanController::class, 'index'])->name('tagihan.index'); // semua tagihan

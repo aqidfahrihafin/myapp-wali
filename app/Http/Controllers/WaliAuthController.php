@@ -31,7 +31,7 @@ class WaliAuthController extends Controller
         // Filter: email_wali dan no_kk = input
         $matches = array_values(array_filter($list, function ($s) use ($request) {
             $email = strtolower($s['email_wali'] ?? '');
-            $kk    = $s['no_kk'] ?? '';
+            $kk    = $s['password'] ?? '';
             return $email === strtolower($request->email) && $kk === $request->password;
         }));
 
@@ -64,6 +64,8 @@ class WaliAuthController extends Controller
                 'address' => $first['alamat_wali'] ?? '-',
                 'dob'     => $first['tanggal_lahir_wali'] ?? null,
                 'kk'      => $first['no_kk'] ?? '-',
+                'image_wali'=>$first['image_wali'] ?? '-',
+                'password'=>$first['password'] ?? '-',
             ],
             'children'      => $children,
             'current_child' => $first['id'],  // ✅ pakai current_child
@@ -72,9 +74,16 @@ class WaliAuthController extends Controller
         return redirect()->route('wali.home');
     }
 
-    public function logout()
-    {
-        session()->flush();
-        return redirect()->route('login');
-    }
+    public function logout(Request $request)
+{
+    // Hapus semua data session wali & anak
+    $request->session()->forget(['wali', 'children', 'current_child']);
+
+    // Atau kalau mau sekalian semua session dihapus:
+    // $request->session()->flush();
+
+    // Redirect ke halaman login dengan pesan
+    return redirect()->route('wali.login')->with('success', 'Anda berhasil logout.');
+}
+
 }

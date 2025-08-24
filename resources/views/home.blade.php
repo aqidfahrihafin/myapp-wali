@@ -38,7 +38,7 @@
           </div>
           <div class="col-6 d-flex justify-content-end align-items-center">
             <div class="feature-card">
-               <a href="#" class="btn text-white fw-bold shadow-lg px-3 py-2 d-flex align-items-center"
+               <a href="/topup" class="btn text-white fw-bold shadow-lg px-3 py-2 d-flex align-items-center"
                 style="background: linear-gradient(45deg, #007bff, #00d4ff); border: none; border-radius: 50px;">
                 <i class="bi bi-lightning-charge me-2"></i> Top Up
                </a>

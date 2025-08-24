@@ -23,7 +23,7 @@
          style="background-image: url('{{ asset('assets/img/core-img/1.png') }}'); border-radius: 6px;">
       <div class="card-body d-flex align-items-center">
         <div class="position-relative me-3">
-          <img src="{{ asset($user->photo ?? 'assets/img/bg-img/user1.png') }}"
+          <img src="{{'http://127.0.0.1:8001/storage/'.$user->photo ??  asset('assets/img/bg-img/user1.png') }}"
                class="rounded-circle border" width="80" height="80" alt="Profile">
         </div>
         <div class="user-info">

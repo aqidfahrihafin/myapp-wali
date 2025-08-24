@@ -20,8 +20,8 @@ class PengaturanProfilController extends Controller
         $currentChild = $children->firstWhere('id', $currentChildId);
 
         // 🔹 Pastikan foto pakai full URL
-        $photo = !empty($currentChild['image'])
-            ? "http://127.0.0.1:8001/storage/" . $currentChild['image']
+        $photo = !empty($wali['image_wali'])
+            ? "http://127.0.0.1:8001/storage/" . $wali['image_wali']
             : asset('assets/img/bg-img/user1.png');
 
         $user = (object) [
@@ -40,32 +40,22 @@ class PengaturanProfilController extends Controller
     // 🔹 Tampilkan form edit profil wali
     public function edit()
     {
-        $childId = session('current_child');
-        if (!$childId) {
-            return redirect()->route('wali.login.form')->withErrors(['msg' => 'Silakan login dulu']);
+        $wali = session('wali');
+        if (!$wali) {
+            return redirect()->route('login')->withErrors(['msg' => 'Silakan login dulu']);
         }
 
-        $response = Http::get("http://127.0.0.1:8001/api/santri/$childId");
-        if ($response->failed()) {
-            return back()->withErrors(['msg' => 'Gagal ambil data dari API']);
-        }
-
-        $santri = $response->json();
-        if (isset($santri[0])) {
-            $santri = $santri[0];
-        }
-
-        $photo = !empty($santri['image'])
-            ? "http://127.0.0.1:8001/storage/" . $santri['image']
+        $photo = !empty($wali['image_wali'])
+            ? "http://127.0.0.1:8001/storage/" . $wali['image_wali']
             : asset('assets/img/bg-img/user1.png');
 
         $user = [
-            'name'    => $santri['nama_wali'] ?? '',
-            'email'   => $santri['email_wali'] ?? '',
-            'phone'   => $santri['no_hp_wali'] ?? '',
-            'address' => $santri['alamat_wali'] ?? '',
-            'dob'     => $santri['tanggal_lahir_wali'] ?? '',
-            'kk'      => $santri['no_kk'] ?? '',
+            'name'    => $wali['nama'] ?? '',
+            'email'   => $wali['email'] ?? '',
+            'phone'   => $wali['phone'] ?? '',
+            'address' => $wali['address'] ?? '',
+            'dob'     => $wali['dob'] ?? '',
+            'kk'      => $wali['kk'] ?? '',
             'photo'   => $photo,
         ];
 
@@ -86,6 +76,7 @@ class PengaturanProfilController extends Controller
             'address' => 'required|string|max:255',
             'dob' => 'required|date',
             'kk' => 'required|string|max:20',
+            
         ]);
 
         try {
@@ -103,17 +94,57 @@ class PengaturanProfilController extends Controller
                 return back()->withErrors(['msg' => 'Gagal update profil ke server utama']);
             }
 
-            // 🔹 Update session wali biar langsung tampil di UI
-            session([
-                'wali' => [
-                    'nama' => $validated['name'],
-                    'email' => $validated['email'],
-                    'phone' => $validated['phone'],
-                    'address' => $validated['address'],
-                    'dob' => $validated['dob'],
-                    'kk' => $validated['kk'],
-                ]
-            ]);
+             // Ambil semua santri dari API
+        $resp = Http::get('http://127.0.0.1:8001/api/santri');
+        if ($resp->failed()) {
+            return back()->withErrors(['msg' => 'Gagal menghubungi API santri.']);
+        }
+
+        $list = $resp->json();
+        if (!is_array($list)) $list = [];
+
+        // Filter: email_wali dan no_kk = input
+        $matches = array_values(array_filter($list, function ($s) use ($validated,$wali) {
+            $email = strtolower($s['email_wali'] ?? '');
+            $kk    = $s['password'] ?? '';
+            return $email === strtolower($validated['email']) && $kk === $wali['password'];
+        }));
+
+        if (count($matches) === 0) {
+            return back()->withErrors(['msg' => 'Email atau KK tidak cocok.']);
+        }
+
+        // Anak pertama sebagai default aktif
+        $first = $matches[0];
+
+        // Siapkan daftar anak (children)
+        $children = array_map(function ($c) {
+            return [
+                'id'      => $c['id'],
+                'nama'    => $c['nama'] ?? '-',
+                'no_kk'   => $c['no_kk'] ?? '-',
+                'nis'     => $c['nis'] ?? null,
+                'image'   => $c['image'] ?? null,
+                'kelas'   => data_get($c, 'kamar.nama_kamar'),
+                'periode' => data_get($c, 'periode.nama_periode'),
+            ];
+        }, $matches);
+
+        // Simpan ke session
+        session([
+            'wali' => [
+                'nama'    => $first['nama_wali'] ?? 'Wali',
+                'email'   => $first['email_wali'] ?? '-',
+                'phone'   => $first['no_hp_wali'] ?? '-',
+                'address' => $first['alamat_wali'] ?? '-',
+                'dob'     => $first['tanggal_lahir_wali'] ?? null,
+                'kk'      => $first['no_kk'] ?? '-',
+                'image_wali'=>$first['image_wali'] ?? '-',
+            ],
+            'children'      => $children,
+            'current_child' => $first['id'],  // ✅ pakai current_child
+        ]);
+
 
             return redirect()->route('pengaturanprofil')->with('success', 'Profil berhasil diperbarui');
 

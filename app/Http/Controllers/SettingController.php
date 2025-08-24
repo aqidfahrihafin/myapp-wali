@@ -9,7 +9,7 @@ class SettingController extends Controller
     $wali = session('wali');
 
     if (!$wali) {
-        return redirect()->route('wali.login.form')->withErrors(['msg' => 'Silakan login dulu']);
+        return redirect()->route('login')->withErrors(['msg' => 'Silakan login dulu']);
     }
 
     // ambil anak aktif dari session
@@ -21,7 +21,7 @@ class SettingController extends Controller
     $user = (object) [
         'name'  => data_get($wali, 'nama', 'Nama Wali'),
         'kk'    => data_get($wali, 'kk', '-'),
-        'photo' => $currentChild['image'] ?? 'assets/img/bg-img/user1.png',
+        'photo' => $wali['image_wali'] ?? 'assets/img/bg-img/user1.png',
     ];
 
     return view('setting', compact('user'));

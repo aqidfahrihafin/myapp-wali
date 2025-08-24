@@ -54,7 +54,7 @@
                     @endphp
 
                     {{ $data['va_numbers'][0]['va_number'] ?? 'Tidak ada VA' }}
-                    {{ $response }}
+                 
                   </p>
               @else
                   <p class="fw-bold text-primary fs-5 mb-1">

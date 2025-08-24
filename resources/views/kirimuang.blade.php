@@ -7,6 +7,8 @@
 @endsection
 
 @section('content')
+<div class="page-content-wrapper">
+      <div class="pt-1"></div>
 <div class="container mt-4">
     @if(session('success'))
       <div class="alert alert-success">{{ session('success') }}</div>
@@ -37,5 +39,7 @@
         </button>
     </form>
   </div>
+</div>
+</div>
 </div>
 @endsection

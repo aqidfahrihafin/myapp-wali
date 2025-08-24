@@ -53,54 +53,67 @@
         </div>
 
         <div class="card shadow-sm border-0 rounded-2 p-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <h6 class="mb-0 text-dark d-flex align-items-center">
-                    <i class="bi bi-funnel-fill text-primary me-2"></i>filter
-                </h6>
-                <div class="d-flex gap-2">
-                    <!-- Dropdown Jenis Transaksi -->
-                    <select class="form-select form-select-sm shadow-sm border-light" style="max-width: 180px;">
-                        <option selected>Semua Jenis</option>
-                        <option value="1">SPP</option>
-                        <option value="2">Tabungan</option>
-                        <option value="3">Lainnya</option>
-                    </select>
+            <form method="GET" action="{{ route('transaksi.index') }}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-dark d-flex align-items-center">
+                        <i class="bi bi-funnel-fill text-primary me-2"></i>Filter
+                    </h6>
+                    <div class="d-flex gap-2">
+                        <!-- Dropdown Jenis Transaksi -->
+                        <select name="jenis" class="form-select form-select-sm shadow-sm border-light" style="max-width: 180px;" onchange="this.form.submit()">
+                            <option value="">Semua Jenis</option>
+                            <option value="spp" {{ request('jenis')=='spp' ? 'selected' : '' }}>SPP</option>
+                            <option value="Tabungan" {{ request('jenis')=='Tabungan' ? 'selected' : '' }}>Tabungan</option>
+                            <option value="topup" {{ request('jenis')=='topup' ? 'selected' : '' }}>Topup</option>
+                            <option value="Kirim" {{ request('jenis')=='Kirim' ? 'selected' : '' }}>Kirim</option>
+                            <option value="Terima" {{ request('jenis')=='Terima' ? 'selected' : '' }}>Terima</option>
+                            
+                        </select>
 
-                    <!-- Dropdown Periode -->
-                    <select class="form-select form-select-sm shadow-sm border-light" style="max-width: 180px;">
-                        <option selected>Semua Waktu</option>
-                        <option value="1">Bulan Ini</option>
-                        <option value="2">Tahun Ini</option>
-                        <option value="3">Custom</option>
-                    </select>
+                        <!-- Dropdown Periode -->
+                        <select name="periode" class="form-select form-select-sm shadow-sm border-light" style="max-width: 180px;" onchange="this.form.submit()">
+                            <option value="">Semua Waktu</option>
+                            <option value="bulan" {{ request('periode')=='bulan' ? 'selected' : '' }}>Bulan Ini</option>
+                            <option value="tahun" {{ request('periode')=='tahun' ? 'selected' : '' }}>Tahun Ini</option>
+                            <option value="custom" {{ request('periode')=='custom' ? 'selected' : '' }}>Custom</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
+
 
 
         <div class="card shadow-sm border-0 rounded-2 overflow-hidden mt-3">
             <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                        <a href="#" class="d-flex align-items-center text-decoration-none w-100">
-                            <i class="bi bi-cash-stack text-danger fs-5 me-3"></i>
-                            <div class="flex-grow-1">
-                                <strong class="text-danger">SPP</strong>
-                                <small class="text-muted d-block">Saldo Keluar</small>
-                            </div>
-                            <span class="badge bg-danger text-white p-2 rounded-pill">Rp. 500.000</span>
-                        </a>
-                    </li>
+                    @foreach ($riwayat as $item)
+                    @if ($item->tipe=='Masuk')
                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                         <a href="#" class="d-flex align-items-center text-decoration-none w-100">
                             <i class="bi bi-heart-fill text-success fs-5 me-3"></i>
                             <div class="flex-grow-1">
-                                <strong class="text-success">Top Up</strong>
+                                <strong class="text-success">{{ $item->jenis }} </strong>
                                 <small class="text-muted d-block">Saldo Masuk</small>
                             </div>
-                            <span class="badge bg-success text-white p-2 rounded-pill">Rp. 700.000</span>
+                            <span class="badge bg-success text-white p-2 rounded-pill">Rp. {{ number_format($item->jumlah) }}</span>
                         </a>
                     </li>
+                    @elseif ($item->tipe=='Keluar')
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <a href="#" class="d-flex align-items-center text-decoration-none w-100">
+                            <i class="bi bi-cash-stack text-danger fs-5 me-3"></i>
+                            <div class="flex-grow-1">
+                                <strong class="text-danger">{{ $item->jenis }}</strong>
+                                <small class="text-muted d-block">Saldo Keluar</small>
+                            </div>
+                            <span class="badge bg-danger text-white p-2 rounded-pill">Rp. {{ number_format($item->jumlah) }}</span>
+                        </a>
+                    </li>
+                    @endif  
+                    @endforeach
+                    
+              
                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                         <a href="#" class="d-flex align-items-center text-decoration-none w-100">
                             <i class="bi bi-lightning-fill text-warning fs-5 me-3"></i>
