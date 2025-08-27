@@ -28,11 +28,13 @@
       <!-- Pilihan Cepat -->
       <div class="mb-4">
         <label class="form-label fw-semibold">Pilihan Cepat</label>
-        <div class="d-flex flex-wrap gap-2">
+        <div class="row g-2">
           @foreach ([50000, 100000, 200000, 500000] as $nominal)
-            <button type="button" class="btn btn-outline-primary quick-amount" data-amount="{{ $nominal }}">
-              Rp{{ number_format($nominal, 0, ',', '.') }}
-            </button>
+            <div class="col-6">
+              <button type="button" class="btn btn-outline-primary w-100 quick-amount" data-amount="{{ $nominal }}">
+                Rp{{ number_format($nominal, 0, ',', '.') }}
+              </button>
+            </div>
           @endforeach
         </div>
       </div>

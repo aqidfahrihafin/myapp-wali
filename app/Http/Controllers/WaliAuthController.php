@@ -65,7 +65,7 @@ class WaliAuthController extends Controller
                 'dob'     => $first['tanggal_lahir_wali'] ?? null,
                 'kk'      => $first['no_kk'] ?? '-',
                 'image_wali'=>$first['image_wali'] ?? '-',
-                'password'=>$first['password'] ?? '-',
+                'password'=>$first['no_kk'] ?? '-',
             ],
             'children'      => $children,
             'current_child' => $first['id'],  // ✅ pakai current_child

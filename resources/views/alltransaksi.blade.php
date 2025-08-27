@@ -112,18 +112,6 @@
                     </li>
                     @endif  
                     @endforeach
-                    
-              
-                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                        <a href="#" class="d-flex align-items-center text-decoration-none w-100">
-                            <i class="bi bi-lightning-fill text-warning fs-5 me-3"></i>
-                            <div class="flex-grow-1">
-                                <strong class="text-warning">Tabungan</strong>
-                                <small class="text-muted d-block">Tabungan Santri</small>
-                            </div>
-                            <span class="badge bg-warning text-dark p-2 rounded-pill">Rp. 150.000</span>
-                        </a>
-                    </li>
                 </ul>
             </div>
         </div>

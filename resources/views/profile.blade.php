@@ -16,9 +16,9 @@
 <div class="page-content-wrapper">
   <div class="pt-3"></div>
   <div class="container">
-
+{{-- card shadow-sm border-0 rounded-2 mb-3  --}}
       <!-- User Profile Card -->
-      <div class="card shadow-sm border-0 rounded-2 mb-3">
+      <div class="card bg-primary mb-3 bg-img" style="background-image: url('{{ asset('assets/img/core-img/1.png') }}')">
           <div class="card-body d-flex align-items-center">
               <div class="position-relative me-3">
                   <img src="{{ isset($santri['image']) ? 'http://127.0.0.1:8001/storage/' . $santri['image'] : asset('assets/img/bg-img/user1.png') }}" 
@@ -27,10 +27,10 @@
               </div>
               <div class="user-info">
                   <!-- Nama santri -->
-                  <h6 class="mb-1 fw-bold">{{ $santri['nama'] ?? 'Tidak ada nama' }}</h6>
+                  <h6 class="mb-1 fw-bold text-white">{{ $santri['nama'] ?? 'Tidak ada nama' }}</h6>
 
                   <!-- Status: santri / pengurus -->
-                  <p class="text-muted small mb-0">
+                  <p class="text-white small mb-0">
                       {{ ucfirst($santri['status'] ?? 'Santri') }}
                   </p>
 
@@ -43,8 +43,8 @@
       </div>
 
       <!-- User Information -->
-      <div class="card shadow-sm border-0 rounded-2">
-          <div class="card-body">
+      <div class="card shadow-sm border-0 rounded-2" style="background-image: url('{{ asset('assets/img/core-img/1.png') }}')">
+          <div class="card-body " >
               <table class="table table-borderless mb-0">
                   <tbody>
                       <tr>

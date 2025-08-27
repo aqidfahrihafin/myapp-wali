@@ -14,7 +14,7 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item px-0 d-flex justify-content-between">
                 <span>Nama</span>
-                <strong>{{ $user->name ?? 'Ahmad Maulana' }}</strong>
+                <strong>{{ $user->name ?? }}</strong>
             </li>
             <li class="list-group-item px-0 d-flex justify-content-between">
                 <span>Email</span>
