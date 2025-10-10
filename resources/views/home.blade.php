@@ -125,6 +125,7 @@
     <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
       <ul class="list-group list-group-flush">
         @forelse($wali['tagihan'] ?? [] as $tagihan)
+        @if ($tagihan['status']!=='Lunas')
           <li class="list-group-item d-flex justify-content-between align-items-center py-3">
             <a href="{{ route('tagihan.detail', ['id' => $tagihan['id']]) }}"
                class="d-flex align-items-center text-decoration-none w-100">
@@ -138,6 +139,7 @@
               </span>
             </a>
           </li>
+           @endif
         @empty
           <li class="list-group-item text-center text-muted py-3">
             Tidak ada tagihan saat ini

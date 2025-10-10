@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 
 class WaliAuthController extends Controller
@@ -32,7 +33,7 @@ class WaliAuthController extends Controller
         $matches = array_values(array_filter($list, function ($s) use ($request) {
             $email = strtolower($s['email_wali'] ?? '');
             $kk    = $s['password'] ?? '';
-            return $email === strtolower($request->email) && $kk === $request->password;
+            return $email === strtolower($request->email) && Hash::check($request->password, $kk);
         }));
 
         if (count($matches) === 0) {

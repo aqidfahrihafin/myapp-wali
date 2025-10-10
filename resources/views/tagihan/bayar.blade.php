@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('backButton')
-  <a href="{{ url('/topup') }}">
+  <a href="{{ url('/') }}">
     <i class="bi bi-arrow-left-circle text-muted fs-5"></i>
   </a>
 @endsection
@@ -28,14 +28,20 @@
         <h5>{{ $tagihan['nama_jenis'] }}</h5>
         <p>{{ $tagihan['deskripsi'] }}</p>
         <p><strong>Nominal:</strong> Rp {{ number_format($tagihan['nominal'],0,',','.') }}</p>
+        <p><strong>Potongan:</strong> {{ number_format($tagihan['potongan'],0,',','.') }}%</p>
+        <p><strong>Nominal Akhir:</strong> Rp {{ number_format($tagihan['nominal_setelah'],0,',','.') }}</p>
         <p><strong>Jatuh Tempo:</strong> {{ $tagihan['created_at'] }}</p>
     </div>
 
     <div class="mt-4">
         <form action="{{ route('tagihan.prosesBayar', $tagihan['id']) }}" method="POST">
             @csrf
+            @if ($tagihan['status']=='Belum Lunas')
+                
+            <input type="hidden" name="jumlah_bayar" value="{{ $tagihan['nominal_setelah'] }}">
             <button type="submit" class="btn btn-primary">Bayar Sekarang</button>
-            <a href="{{ route('tagihan.index') }}" class="btn btn-secondary">Kembali</a>
+            @endif
+            <a href="{{ url()->previous() }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 </div>

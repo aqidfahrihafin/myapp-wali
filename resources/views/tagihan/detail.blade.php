@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('backButton')
-  <a href="{{ url('/topup') }}">
+  <a href="{{ url('/') }}">
     <i class="bi bi-arrow-left-circle text-muted fs-5"></i>
   </a>
 @endsection
@@ -49,6 +49,7 @@
                         </a>
                         <form action="{{ route('tagihan.prosesBayar', $tagihan['id']) }}" method="POST">
                             @csrf
+                            <input type="text" name="jumlah_bayar" value="{{ $tagihan['jumlah_tagihan'] }}">
                             <button type="submit" class="btn btn-primary px-4">
                                 Bayar Sekarang
                             </button>

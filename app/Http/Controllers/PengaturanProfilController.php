@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 
 class PengaturanProfilController extends Controller
@@ -12,7 +13,7 @@ class PengaturanProfilController extends Controller
     {
         $wali = session('wali');
         if (!$wali) {
-            return redirect()->route('wali.login.form')->withErrors(['msg' => 'Silakan login dulu']);
+            return redirect()->route('login')->withErrors(['msg' => 'Silakan login dulu']);
         }
 
         $currentChildId = session('current_child');
@@ -81,7 +82,7 @@ class PengaturanProfilController extends Controller
 
         try {
             // 🔹 Simpan ke sistem utama (myapp) lewat API
-            $response = Http::put("http://127.0.0.1:8001/api/santri/{$childId}", [
+            $response = Http::put("http://127.0.0.1:8001/api/update/santri/{$childId}", [
                 'nama_wali' => $validated['name'],
                 'email_wali' => $validated['email'],
                 'no_hp_wali' => $validated['phone'],
@@ -107,7 +108,8 @@ class PengaturanProfilController extends Controller
         $matches = array_values(array_filter($list, function ($s) use ($validated,$wali) {
             $email = strtolower($s['email_wali'] ?? '');
             $kk    = $s['password'] ?? '';
-            return $email === strtolower($validated['email']) && $kk === $wali['password'];
+            return $email === strtolower($validated['email']) && Hash::check(  $wali['password'],$kk);
+            
         }));
 
         if (count($matches) === 0) {

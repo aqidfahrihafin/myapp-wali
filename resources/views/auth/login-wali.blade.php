@@ -161,7 +161,7 @@
         <div class="pt-3"></div>
         <div class="welcome-content">
             <h2 class="mb-2">Selamat Datang</h2>
-            <h2>Login Wali</h2>
+            <div class="pt-3"></div>
             <p>Silakan login menggunakan email dan No KK Anda untuk mengakses akun wali santri.</p>
         </div>
     </div>
@@ -191,7 +191,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Password (No KK)</label>
+                    <label class="form-label fw-semibold">Password</label>
                     <div class="input-group">
                         <input type="password" name="password" id="passwordInput"
                                class="form-control" placeholder="Masukkan No KK" required>

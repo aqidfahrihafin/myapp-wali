@@ -13,6 +13,7 @@ use App\Http\Controllers\PengaturanProfilController;
 use App\Http\Controllers\WaliAuthController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\PenarikanController;
+use App\Http\Controllers\PengaturanAkunController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,14 +30,14 @@ Route::middleware('wali.session')->group(function () {
     // === HOME ===
 Route::get('/', [HomeController::class, 'index'])->name('wali.home');
 
-
 // === PROFILE SANTRI ===
 Route::get('/profile', [SantriController::class, 'profile'])->name('profile');
 
 // === SETTING & MENU STATIS ===
 Route::get('/setting', [SettingController::class, 'index'])->name('setting');
-Route::get('/pengaturan-akun', fn() => view('pengaturanakun'));
-Route::get('/edit-akun', fn() => view('editakun'));
+Route::get('/pengaturan-akun', [PengaturanAkunController::class, 'index'])->name('pengaturanakun.index');
+Route::get('/edit-akun', [PengaturanAkunController::class, 'edit'])->name('pengaturanakun.edit');
+Route::post('/edit-akun', [PengaturanAkunController::class, 'update'])->name('pengaturanakun.update');
 
 // === PENGATURAN PROFIL WALI ===
 Route::get('/pengaturanprofil', [PengaturanProfilController::class, 'index'])->name('pengaturanprofil');

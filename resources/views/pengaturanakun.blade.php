@@ -14,15 +14,19 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item px-0 d-flex justify-content-between">
                 <span>Nama</span>
-                <strong>{{ $user->name ?? }}</strong>
+                <strong>{{ $user->name ?? '-' }}</strong>
             </li>
             <li class="list-group-item px-0 d-flex justify-content-between">
                 <span>Email</span>
-                <strong>{{ $user->email ?? 'dummy@example.com' }}</strong>
+                <strong>{{ $user->email ?? '-' }}</strong>
             </li>
             <li class="list-group-item px-0 d-flex justify-content-between">
                 <span>No. HP</span>
-                <strong>{{ $user->phone ?? '08********89' }}</strong>
+                <strong>{{ $user->phone ?? '-' }}</strong>
+            </li>
+            <li class="list-group-item px-0 d-flex justify-content-between">
+                <span>Password</span>
+                <strong class="password-hidden">********</strong>
             </li>
         </ul>
 

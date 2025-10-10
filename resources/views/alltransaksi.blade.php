@@ -93,7 +93,7 @@
                         <a href="#" class="d-flex align-items-center text-decoration-none w-100">
                             <i class="bi bi-heart-fill text-success fs-5 me-3"></i>
                             <div class="flex-grow-1">
-                                <strong class="text-success">{{ $item->jenis }} </strong>
+                                <strong class="text-success">{{ucfirst($item->jenis)  }} </strong>
                                 <small class="text-muted d-block">Saldo Masuk</small>
                             </div>
                             <span class="badge bg-success text-white p-2 rounded-pill">Rp. {{ number_format($item->jumlah) }}</span>
@@ -104,7 +104,7 @@
                         <a href="#" class="d-flex align-items-center text-decoration-none w-100">
                             <i class="bi bi-cash-stack text-danger fs-5 me-3"></i>
                             <div class="flex-grow-1">
-                                <strong class="text-danger">{{ $item->jenis }}</strong>
+                                <strong class="text-danger">{{ucfirst($item->jenis)  }}</strong>
                                 <small class="text-muted d-block">Saldo Keluar</small>
                             </div>
                             <span class="badge bg-danger text-white p-2 rounded-pill">Rp. {{ number_format($item->jumlah) }}</span>

@@ -10,41 +10,40 @@
 <div class="container mt-4">
     <h5 class="fw-bold mb-3">Edit Akun</h5>
 
-    <form id="editAccountForm">
+    <form id="editAccountForm" action="{{ route('pengaturanakun.update') }}" method="POST">
+        @csrf
         <div class="card shadow-sm border-0 rounded-3 p-3 mb-4">
 
-            <div class="mb-3">
-                <label for="name" class="form-label small">Nama</label>
-                <input type="text" class="form-control" id="name" placeholder="Masukkan nama baru" value="{{ $user->name ?? '' }}">
-            </div>
-
-            <div class="mb-3">
+           <div class="mb-3">
                 <label for="email" class="form-label small">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Masukkan email baru" value="{{ $user->email ?? '' }}">
-            </div>
-
-            <div class="mb-3">
-                <label for="phone" class="form-label small">No. HP</label>
-                <input type="text" class="form-control" id="phone" placeholder="Masukkan no HP baru" value="{{ $user->phone ?? '' }}">
+                <input type="email" class="form-control" id="email" name="email" value="{{ $user->email ?? '' }}" disabled>
             </div>
 
             <hr>
 
             <div class="mb-3">
                 <label for="currentPassword" class="form-label small">Password Lama</label>
-                <input type="password" class="form-control" id="currentPassword" placeholder="Masukkan password lama">
+                <input type="password" class="form-control" id="currentPassword" name="current_password">
             </div>
 
             <div class="mb-3">
                 <label for="newPassword" class="form-label small">Password Baru</label>
-                <input type="password" class="form-control" id="newPassword" placeholder="Masukkan password baru">
+                <input type="password" class="form-control" id="newPassword" name="password" autocomplete="new-password">
             </div>
 
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label small">Konfirmasi Password Baru</label>
-                <input type="password" class="form-control" id="confirmPassword" placeholder="Konfirmasi password baru">
+                <input type="password" class="form-control" id="confirmPassword" name="password_confirmation" autocomplete="new-password">
             </div>
-
+            @if ($errors->any())
+                <div class="alert alert-danger mt-3">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
 
         <div class="d-flex justify-content-between">
@@ -54,42 +53,19 @@
         <div style="height: 100px;"></div>
     </form>
 </div>
-
-<!-- Modal Success -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content rounded-3">
-      <div class="modal-body text-center p-4">
-        <i class="bi bi-check-circle-fill text-success fs-1 mb-3"></i>
-        <h5 class="mb-2">Berhasil!</h5>
-        <p class="small text-muted">Data akun berhasil diubah (dummy).</p>
-        <button type="button" class="btn btn-success w-100 mt-3" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
 @endsection
 
 @push('scripts')
 <script>
-document.getElementById('editAccountForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    document.getElementById('editAccountForm').addEventListener('submit', function(e) {
+        let newPassword = document.getElementById('newPassword').value;
+        let confirmPassword = document.getElementById('confirmPassword').value;
 
-    // Validasi simple
-    let newPassword = document.getElementById('newPassword').value;
-    let confirmPassword = document.getElementById('confirmPassword').value;
-
-    if (newPassword && (newPassword !== confirmPassword)) {
-        alert('Password baru dan konfirmasi tidak cocok.');
-        return;
-    }
-
-    // Simulasi update berhasil
-    var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-    successModal.show();
-
-    // Reset form (optional)
-    // this.reset();
-});
+        if (newPassword && (newPassword !== confirmPassword)) {
+            e.preventDefault(); // stop submit
+            alert('Password baru dan konfirmasi tidak cocok.');
+            return;
+        }
+    });
 </script>
 @endpush

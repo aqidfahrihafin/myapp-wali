@@ -20,18 +20,25 @@ class TagihanController extends Controller
         if ($respSantri->successful()) {
             $santriList = $respSantri->json();
             $child = collect($santriList)->firstWhere('id', $activeId) ?? ($santriList[0] ?? null);
-
-            if ($child && !empty($child['tagihan'])) {
-                $tagihanList = collect($child['tagihan'])->map(function ($t) {
+        if ($child && !empty($child['tagihan'])) {
+            $tagihanList = collect($child['tagihan'])
+                ->filter(function ($t) {
+                    return ($t['status'] ?? null) === 'Belum Lunas';
+                })
+                ->map(function ($t) {
                     return [
                         'id'         => $t['id'] ?? null,
                         'nama_jenis' => $t['deskripsi'] ?? 'Tagihan',
                         'deskripsi'  => $t['deskripsi'] ?? null,
                         'nominal'    => (int)($t['jumlah_tagihan'] ?? 0),
+                        'status'       => $t['status'] ?? null,
                         'created_at' => $t['tanggal_jatuh_tempo'] ?? $t['created_at'] ?? null,
                     ];
-                })->all();
-            }
+                })
+                ->values() // reset index biar urut rapi
+                ->all();
+        }
+
         }
 
         return view('tagihan.alltagihan', compact('tagihanList'));
@@ -50,27 +57,40 @@ class TagihanController extends Controller
         if ($respSantri->successful()) {
             $santriList = $respSantri->json();
             $child = collect($santriList)->firstWhere('id', $activeId) ?? ($santriList[0] ?? null);
-
             $found = collect($child['tagihan'] ?? [])->firstWhere('id', (int)$id);
 
             if ($found) {
+                // ambil potongan dari persentase_tagihan
+                $potongan = isset($child['persentase_tagihan']['potongan'])
+                    ? (float)$child['persentase_tagihan']['potongan']
+                    : 0;
+
+                $jumlahTagihan = (float)($found['jumlah_tagihan'] ?? 0);
+                $jumlahSetelahPotongan = $jumlahTagihan - ($jumlahTagihan * ($potongan / 100));
+
                 $tagihan = [
-                    'id'         => $found['id'],
-                    'nama_jenis' => $found['deskripsi'] ?? 'Tagihan',
-                    'deskripsi'  => $found['deskripsi'] ?? null,
-                    'nominal'    => (int)($found['jumlah_tagihan'] ?? 0),
-                    'created_at' => $found['tanggal_jatuh_tempo'] ?? $found['created_at'] ?? null,
+                    'id'              => $found['id'],
+                    'nama_jenis'      => $found['deskripsi'] ?? 'Tagihan',
+                    'deskripsi'       => $found['deskripsi'] ?? null,
+                    'nominal'         => (int)$jumlahTagihan,
+                    'potongan'        => $potongan, // contoh: 20
+                    'nominal_setelah' => (int)$jumlahSetelahPotongan,
+                    'status'          => $found['status'] ?? null,
+                    'created_at'      => $found['tanggal_jatuh_tempo'] ?? $found['created_at'] ?? null,
                 ];
+
                 return view('tagihan.bayar', compact('tagihan'));
             }
+
         }
 
         abort(404, 'Tagihan tidak ditemukan');
     }
 
     // === Proses bayar ===
-    public function prosesBayar($id)
+    public function prosesBayar($id, Request $request)
     {
+        
         $waliId = auth()->id() ?? session('wali_id');
         $activeId = session('current_child');
 
@@ -87,7 +107,7 @@ class TagihanController extends Controller
             return back()->with('error', 'Tagihan tidak ditemukan.');
         }
 
-        $grossAmount = (int)($found['jumlah_tagihan'] ?? 0);
+        $grossAmount = $request->input('jumlah_bayar') ??0;
         if ($grossAmount <= 0) {
             return back()->with('error', 'Nominal tagihan tidak valid.');
         }
@@ -105,9 +125,23 @@ class TagihanController extends Controller
             'judul'      => $found['deskripsi'] ?? 'Pembayaran Tagihan',
             'keterangan' => 'Pembayaran tagihan #' . $id,
         ]);
-
-        return redirect()->route('tagihan.detail', $id)
-            ->with('success', 'Tagihan berhasil dibayar memakai saldo.');
+        try {
+        // hit API ke project myapp (sesuaikan URL API kamu)
+        $response = Http::put($this->baseUrl."/tagihan/{$id}", [
+            'jumlah_tagihan' => $request->input('jumlah_bayar') // contoh, bisa diisi jumlah sesuai saldo/tagihan
+        ]);
+// dd($this->baseUrl."/tagihan/{$id}");
+        if ($response->successful()) {
+            return redirect()->back()
+                ->with('success', 'Tagihan berhasil dibayar memakai saldo.');
+        } else {
+            return redirect()->back()
+                ->with('error', 'Gagal membayar tagihan: '.$response->body());
+        }
+    } catch (\Exception $e) {
+        return redirect()->back()
+            ->with('error', 'Terjadi kesalahan: '.$e->getMessage());
+    }
     }
 
     // === Helper ===
